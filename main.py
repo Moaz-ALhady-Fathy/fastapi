@@ -1,6 +1,16 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from selenium import webdriver
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.headless = True
+wd = webdriver.Chrome('chromedriver',options=chrome_options)
+
+wd.get("https://www.classcentral.com/")
+# wd.page_source
+
 app = FastAPI()
 
 class Msg(BaseModel):
@@ -9,7 +19,7 @@ class Msg(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World. Welcome to FastAPI!"}
+    return {"message": {wd.page_source} }
 
 
 @app.get("/path")
